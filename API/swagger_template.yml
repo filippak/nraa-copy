@@ -1,0 +1,143 @@
+# API spec in YAML of POTAPI
+swagger: '2.0'
+info:
+  title: PostNord Operational Touchpoint/Task API (POTAPI)
+  description:  | 
+    Used by backends when executing the
+    tasks required for a given day. The syntax is inspired by OData. This API
+    will be provided by ORM, (Operational Route Manager)
+    
+    An API providing operational tasks & progress-reporting for field workers; mailmen, truck drivers and terminalworkers.
+    Used by servers and clients.?
+    
+    TODO Client Vs Server usage? same api?
+    
+    OBS! all timestamps shall be in UTC.
+    
+    Showcase; shared datamodels, queing over rest, security, integration-best-practices, merge of orc & potapi for co-location 
+    
+              
+          
+          GET /{collection}/topic?skip=1&limit=10
+          GET /{collection}/1/ 
+          GET //{collection}?odata-query
+          //PUT /{collection}/1/  
+          POST /{collection}/topic //"always" write change to topic; for easy distribution of changes...
+          
+          //do we need to get multiple topics in same get?
+          //request throttling??
+          
+          #todo; transaction/sync-object/metadata, interchangetime
+          #transactionid, modifiedby(device|app|idp|userid), 
+          
+          #todo; link error-respones? (should contain logrowid, transactionid,  etc)
+          #todo; payload signature?
+          #todo; responses from postnord-collection on swaggerhub
+          #todo; health-endpoint from postnord-template
+          #todo; regex for all strings
+
+    
+  version: "2.0.0"
+  termsOfService:  "TODO: rules how producer & consumer shall behave?"
+  license:
+    name: PostNord Property
+  contact:
+    name: David Hultsberg
+    email: david.hultsberg@postnord.com
+    url: https://postnord.slack.com/messages/C0RE4936F/details/
+externalDocs:
+  description: Read more about POTAPI on Bitbucket (TODO!)
+  url: https://bitbucket.org/avupublicapis/ndm-docs
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  OAuth2:
+    type: oauth2
+    flow: accessCode #todo
+    authorizationUrl: https://example.com/oauth/authorize #todo
+    tokenUrl: https://example.com/oauth/token #todo
+    scopes: #todo; scope per role? i.e. worker, router-optimizer, masterdata etc?..
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
+security:
+  - ApiKeyAuth: []
+  - OAuth2: [read, write]
+schemes:
+  #Vision is that API will be exposed on Internet; improving time2market for new solutions, hence HTTPS
+  - https 
+host: api.postnord.com
+basePath: /potapi/v2
+consumes:
+  - application/json
+produces:
+  - application/json
+# The relative URL's in the API
+# Follows http://www.odata.org/documentation/odata-version-2-0/uri-conventions/
+paths:
+  /health:
+    get:
+      summary: Checks if the server and its dependencys is working
+      #security: []   # todo; No security or?
+      responses:
+        200:
+          description: Server is up and running
+        default:
+          description: Something is wrong
+parameters:
+  skip:
+    name: skip
+    in: query
+    description: number of records to skip
+    required: true
+    type: integer
+    format: int32
+  limit:
+    name: take
+    in: query
+    description: max records to return
+    required: true
+    type: integer
+    format: int32
+  
+definitions:
+  Metadata:
+    description: Base object with attributes for tracability, security and synchronization of changes
+    type: object
+    required:
+    - objectId
+    - modifiedAt
+    properties:
+      transaction_id:
+        type: string
+        format: uuid
+      enqueued_at:
+        type: string
+        format: date-time 
+      object_id:
+        type: string
+        format: uuid
+      source_objectId:
+        type: string
+        format: uuid
+      modified_by:
+        type: string
+        format: uri
+        description: Format hardwareid/app/idp/userid or regex?
+      modified_at:
+        type: string
+        format: date-time
+      created_at:
+        type: string
+        format: date-time
+      jsonsign:
+        type: string
+        description: A digital signature for non repudation and protection from changes.
+      schema:
+        type: string
+        description: schema-version for supporting multiple versions on the same topics etc
+      test:
+        type: boolean
+        description: Use for sending test-messages in production environments without affecting business.
