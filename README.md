@@ -8,7 +8,7 @@ A mobile app where mailmen (and others working in the field) can;
 This is a Proof Of Concept (PoC)
 Goal is to construct UX, app and showcase rapid development, Progressive Web App possibilities and innovation in general.
 
-![Logical Target Architecture](https://bytebucket.org/davidhultsberg/nordicrecipientadminapp/raw/50ee4557833ba94c70911db2fe5f79be60378a3a/Docs/NordicRecipientAdminTA.jpg)
+![Logical Target Architecture](https://bitbucket.org/davidhultsberg/nordicrecipientadminapp/raw/master/Docs/NordicRecipientAdminTA.jpg)
 
 Chosen frameworks/tools are:
 
