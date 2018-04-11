@@ -23,6 +23,7 @@ Chosen frameworks/tools are:
 * API-Contract on SwaggerHub: https://app.swaggerhub.com/apis/NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0
 * Todo-list on Trello: https://trello.com/b/pbG3xppU/nordicrecipientadministrationapp
 * Communication on Slack: https://postnordapp.slack.com/messages/C924XAN3A/team/U934QSG48/
+* Relevant backend-api/tool (for those who have postnord-account, and are intranet); http://pgm.posten.se/pgm/routeadmin/
 
 ### Definition Of 'Ready for Test' ###
 
@@ -36,7 +37,6 @@ Chosen frameworks/tools are:
 ### Who do I talk to? ###
 
 * Product Owner: david.hultsberg@postnord.com
-
 
 ### React Git project setup ###
 
@@ -53,3 +53,4 @@ CD masterBranch\TestStructure\TestRekit
 npm install
 
 npm start
+
