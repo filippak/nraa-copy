@@ -20,6 +20,7 @@ Chosen frameworks/tools are:
 
 ### Tools ###
 
+* API-Contract on SwaggerHub: https://app.swaggerhub.com/apis/NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0
 * Todo-list on Trello: https://trello.com/b/pbG3xppU/nordicrecipientadministrationapp
 * Communication on Slack: https://postnordapp.slack.com/messages/C924XAN3A/team/U934QSG48/
 
@@ -36,6 +37,7 @@ Chosen frameworks/tools are:
 
 * Product Owner: david.hultsberg@postnord.com
 
+
 ### React Git project setup ###
 
 First you need to setup git/bitbucket and pull the master branch.
@@ -51,4 +53,3 @@ CD masterBranch\TestStructure\TestRekit
 npm install
 
 npm start
-
