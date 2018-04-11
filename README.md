@@ -54,3 +54,20 @@ npm install
 
 npm start
 
+### Swagger setup ###
+
+Due to the integration limitations that comes with using the free version of SwaggerHub, 
+we will instead use swagger-node.
+
+https://github.com/swagger-api/swagger-node
+
+Installation:
+nmp install -g swagger
+Start Swagger Editor (run the following command in \API\Swagger-node\NordicRecipientAdminAppAPI\):
+
+swagger project edit
+
+Start swagger project for testing the API (run the following command in \API\Swagger-node\):
+
+swagger project start NordicRecipientAdminAppAPI
+
