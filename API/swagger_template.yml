@@ -103,6 +103,9 @@ parameters:
     format: int32
   
 definitions:
+  Resident:
+    description:
+      
   Metadata:
     description: Base object with attributes for tracability, security and synchronization of changes
     type: object
