@@ -73,3 +73,4 @@ Start swagger project for testing the API (run the following command in \API\Swa
 
 swagger project start NordicRecipientAdminAppAPI
 
+The .yaml-file resides in \API\Swagger-node\NordicRecipientAdminAppAPI\api\swagger\
