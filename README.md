@@ -3,17 +3,17 @@
 This repo holds sourcecode and documentation for NordicRecipientAdminApp
 A mobile app where mailmen (and others working in the field) can;
 
-	- suggest changes to recipient database (initially ISU); i.e. recipient preferences, who lives where 
-	- get routeinfo for mailman so that he can perform his work without any manual/paper-based processes.
+	- suggest changes to recipient database (initially ISU); initially recipient preferences and  who lives where
 
 This is a Proof Of Concept (PoC)
-Goal is to construct UX, app and showcase rapid development, Progressive Web App possibilities and innovation.
+Goal is to construct UX, app and showcase rapid development, Progressive Web App possibilities and innovation in general.
+
+![Logical Target Architecture](https://bitbucket.org/davidhultsberg/nordicrecipientadminapp/src/2264bb44c4178c3eaca8288d3d9de1acf33cfd98/Docs/NordicRecipientAdminTA.jpg)
 
 Chosen frameworks/tools are:
 
 - Progressive Web App 
 - Reactjs
-- Swagger
 - Auth0
 - Reakit?
 - React studio?
