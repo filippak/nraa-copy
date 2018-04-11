@@ -18,7 +18,7 @@ Chosen frameworks/tools are:
 - Reakit?
 - React studio?
 
-### Tools ###
+### Links ###
 
 * API-Contract on SwaggerHub: https://app.swaggerhub.com/apis/NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0
 * Todo-list on Trello: https://trello.com/b/pbG3xppU/nordicrecipientadministrationapp
