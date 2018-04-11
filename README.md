@@ -62,7 +62,9 @@ we will instead use swagger-node.
 https://github.com/swagger-api/swagger-node
 
 Installation:
+
 nmp install -g swagger
+
 Start Swagger Editor (run the following command in \API\Swagger-node\NordicRecipientAdminAppAPI\):
 
 swagger project edit
