@@ -1,60 +1,322 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "0.0.1"
-  title: Hello World App
-# during dev, should point to your local machine
-host: localhost:10010
-# basePath prefixes all resource paths 
-basePath: /
-# 
+  title: Nordic Recipient Admin App
+  description: "TODO/Following David's template"
+  
+  version: "1.0.0"
+  termsOfService: "TODO"
+  license:
+    name: PostNord Property
+  contact:
+    name: David Hultsberg
+    email: david.hultsberg@postnord.com
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  OAuth2:
+    type: oauth2
+    flow: accessCode #todo
+    authorizationUrl: https://example.com/oauth/authorize #todo
+    tokenUrl: https://example.com/oauth/token #todo
+    scopes: #todo; scope per role? i.e. worker, router-optimizer, masterdata etc?..
+      read: Grants read access
+      write: Grants write access
+      admin: Grants read and write access to administrative information
+security:
+  - ApiKeyAuth: []
+  - OAuth2: [read, write]
 schemes:
-  # tip: remove http to make production-grade
-  - http
-  - https
-# format of bodies a client can send (Content-Type)
+  - https 
+
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
+# The relative URL's in the API
+# Follows http://www.odata.org/documentation/odata-version-2-0/uri-conventions/
 paths:
-  /hello:
-    # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+  /health:
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
-      parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
-          type: string
+      summary: Checks if the server and its dependencies are working
+      #security: []   # todo; No security or?
       responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/HelloWorldResponse"
-        # responses may fall through to errors
+        200:
+          description: Server is up and running
         default:
-          description: Error
+          description: Something is wrong
+  /routes:
+    get:
+      tags:
+      - route
+      summary: Finds Routes by name 
+      description: Muliple tags can be provided with comma separated strings. Use\
+          \ tag1, tag2, tag3 for testing.
+      produces:
+      - application/json
+      - application/xml
+      parameters:
+      - name: name
+        in: query
+        description: api allows starts-with 2 first characters
+        required: true
+        type: string
+        
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
           schema:
-            $ref: "#/definitions/ErrorResponse"
-  /swagger:
-    x-swagger-pipe: swagger_raw
-# complex objects have schema definitions
+            type: array
+            items:
+              $ref: '#/definitions/MailDeliveryRoute'
+        400:
+          description: Invalid tag value
+  /deliveryAddresses:
+    get:
+      tags:
+        - deliveryAddress
+      summary: Finds delivery addresses by route name
+      parameters:
+      - name: route name
+        in: query
+        description: api allows starts-with 2 first characters
+        required: true
+        type: string
+      
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeliveryAddress'
+        400:
+          description: Invalid route name
+  /deliveryPoints:
+    get:
+      tags:
+      - deliveryPoint
+      summary: Finds delivery points by delivery address id  
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/DeliveryPoint'
+        400:
+          description: Invalid delivery address id
+  
 definitions:
-  HelloWorldResponse:
+  Recipient:
+    description: A recipient (person) that resides at a delivery point. TODO consider naming it recipient instead
+    type: object
     required:
-      - message
+      - metadata
     properties:
-      message:
+      delivery_point_id:
         type: string
-  ErrorResponse:
+        format: uuid
+      firstname:
+        type: string
+      lastname:
+        type: string
+      sequence_number:
+        type: string
+      private_recipient:
+        type: boolean
+      expiration_date:
+        type: string
+        format: date-time
+      starting_date:
+        type: string
+        format: date-time
+      metadata:
+        $ref: '#/definitions/Metadata'
+  DeliveryPoint:
+    description: The delivery end point for mail
+    type: object
     required:
-      - message
+      - metadata
     properties:
-      message:
+      object_id:
         type: string
+        format: uuid
+      delivery_address_id:
+        type: string
+        format: uuid
+      apartment_number:
+        type: string
+      sequence_number:
+        type: string
+      decline_odr:
+        type: boolean
+      decline_gt:
+        type: boolean
+      floor:
+        type: string
+      metadata:
+        $ref: '#/definitions/Metadata'
+  DeliveryAddress:
+    description: The delivery address for mail
+    type: object
+    required:
+      - metadata
+    properties:
+      object_id:
+        type: string
+        format: uuid
+      mail_delivery_route_id: 
+        type: string
+        format: uuid
+      stop_point_id:
+        type: string
+        format: uuid
+      postal_code:
+        type: string
+      street_address:
+        type: string
+        format: address
+      address_position:
+        type: integer
+      #designation1: todo
+      #designation2: todo
+      sequence_number:
+        type: string
+      #x: todo
+      #y: todo
+      #glp_id:todo
+      metadata:
+        $ref: '#/definitions/Metadata'
+  StopPoint:
+    description: TODO
+    type: object
+    required:
+      - metadata
+    properties:
+      object_id:
+        type: string
+        format: uuid
+      stop_point_type:
+        type: object
+        properties:
+          object_id:
+            type: string
+            format: uuid
+          name:
+            type: string
+          label:
+            type: string
+      delivery_address_id:
+        type: string
+        format: uuid
+      information:
+        type: string
+      door_code:
+        type: string
+      metadata:
+        $ref: '#/definitions/Metadata'
+  MailDeliveryRoute:
+    description: TODO
+    type: object
+    required:
+      - metadata
+    properties:
+      object_id:
+        type: string
+        format: uuid
+      delivery_office_id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      sequence_number:
+        type: string
+      metadata:
+        $ref: '#/definitions/Metadata'
+  DeliveryOffice:
+    description: TODO
+    type: object
+    required:
+      - metadata
+    properties:
+      object_id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        description: The name of the delivery office
+      metadata:
+        $ref: '#/definitions/Metadata'
+  RecipientGroup:
+    description: TODO
+    type: object
+    required:
+      - metadata
+    properties:
+      delivery_point_id:
+        type: string
+        format: uuid
+      amount:
+        type: integer
+      recipient_group_type: 
+        type: object
+        properties:
+          object_id:
+            type: string
+            format: uuid
+          name:
+            type: string
+          label:
+            type: string
+        
+     
+      metadata:
+        $ref: '#/definitions/Metadata'
+  DeviceEvent:
+    description: TODO
+    type: object
+      
+  Metadata:
+    description: This is from David's template. Base object with attributes for tracability, security and synchronization of changes
+    type: object
+    required:
+    - object_id
+    - modified_at
+    properties:
+      transaction_id:
+        type: string
+        format: uuid
+      enqueued_at:
+        type: string
+        format: date-time 
+      object_id:
+        type: string
+        format: uuid
+      source_objectId:
+        type: string
+        format: uuid
+      modified_by:
+        type: string
+        format: uri
+        description: Format hardwareid/app/idp/userid or regex?
+      modified_at:
+        type: string
+        format: date-time
+      created_at:
+        type: string
+        format: date-time
+      jsonsign:
+        type: string
+        description: A digital signature for non repudation and protection from changes.
+      schema:
+        type: string
+        description: schema-version for supporting multiple versions on the same topics etc
+      test:
+        type: boolean
+        description: Use for sending test-messages in production environments without affecting business.
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0
