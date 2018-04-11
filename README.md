@@ -35,3 +35,20 @@ Chosen frameworks/tools are:
 ### Who do I talk to? ###
 
 * Product Owner: david.hultsberg@postnord.com
+
+### React Git project setup ###
+
+First you need to setup git/bitbucket and pull the master branch.
+
+Then, In Console:
+
+npm install -g rekit
+
+CD masterBranch\TestStructure\TestRekit
+
+** TestStructre is located in the git/bitbucket master branch folder. **
+
+npm install
+
+npm start
+
