@@ -61,15 +61,15 @@ we will instead use swagger-node.
 
 https://github.com/swagger-api/swagger-node
 
-Installation:
+* Installation:
 
 npm install -g swagger
 
-Start Swagger Editor (run the following command in \API\Swagger-node\NordicRecipientAdminAppAPI\):
+* Start Swagger Editor (run the following command in \API\Swagger-node\NordicRecipientAdminAppAPI\):
 
 swagger project edit
 
-Start swagger project for testing the API (run the following command in \API\Swagger-node\):
+* Start swagger project for testing the API (run the following command in \API\Swagger-node\):
 
 swagger project start NordicRecipientAdminAppAPI
 
