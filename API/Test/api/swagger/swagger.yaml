@@ -47,15 +47,16 @@ paths:
         default:
           description: Something is wrong
   /routes:
+    x-swagger-router-controller: hello_world
     get:
       tags:
       - route
       summary: Finds Routes by name 
       description: Muliple tags can be provided with comma separated strings. Use\
           \ tag1, tag2, tag3 for testing.
+      operationId: findRoute
       produces:
       - application/json
-      - application/xml
       parameters:
       - name: name
         in: query
@@ -65,7 +66,7 @@ paths:
         
         collectionFormat: multi
       responses:
-        "200":
+        200:
           description: successful operation
           schema:
             type: array
@@ -73,6 +74,8 @@ paths:
               $ref: '#/definitions/MailDeliveryRoute'
         400:
           description: Invalid tag value
+        404:
+          description: Hello
   /deliveryAddresses:
     get:
       tags:
@@ -271,14 +274,8 @@ definitions:
             type: string
           label:
             type: string
-        
-     
       metadata:
         $ref: '#/definitions/Metadata'
-  DeviceEvent:
-    description: TODO
-    type: object
-      
   Metadata:
     description: This is from David's template. Base object with attributes for tracability, security and synchronization of changes
     type: object
