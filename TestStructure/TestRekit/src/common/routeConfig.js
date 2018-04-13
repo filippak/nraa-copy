@@ -2,7 +2,6 @@ import { App } from '../features/home';
 import { PageNotFound } from '../features/common';
 import homeRoute from '../features/home/route';
 import commonRoute from '../features/common/route';
-import fromApiRoute from '../features/from-api/route';
 import demoRoute from '../features/demo/route';
 
 // NOTE: DO NOT CHANGE the 'childRoutes' name and the declaration pattern.
@@ -10,7 +9,6 @@ import demoRoute from '../features/demo/route';
 const childRoutes = [
   homeRoute,
   commonRoute,
-  fromApiRoute,
   demoRoute,
 ];
 
