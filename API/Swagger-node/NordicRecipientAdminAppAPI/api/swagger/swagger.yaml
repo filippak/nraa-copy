@@ -1,4 +1,5 @@
 swagger: '2.0'
+
 info:
   title: Nordic Recipient Admin App
   description: "TODO/Following David's template"
@@ -10,30 +11,14 @@ info:
   contact:
     name: David Hultsberg
     email: david.hultsberg@postnord.com
-securityDefinitions:
-  ApiKeyAuth:
-    type: apiKey
-    in: header
-    name: X-API-Key
-  OAuth2:
-    type: oauth2
-    flow: accessCode #todo
-    authorizationUrl: https://example.com/oauth/authorize #todo
-    tokenUrl: https://example.com/oauth/token #todo
-    scopes: #todo; scope per role? i.e. worker, router-optimizer, masterdata etc?..
-      read: Grants read access
-      write: Grants write access
-      admin: Grants read and write access to administrative information
-security:
-  - ApiKeyAuth: []
-  - OAuth2: [read, write]
 schemes:
   - https 
-
 consumes:
   - application/json
 produces:
   - application/json
+host: localhost:10010
+basePath: /
 # The relative URL's in the API
 # Follows http://www.odata.org/documentation/odata-version-2-0/uri-conventions/
 paths:
@@ -317,6 +302,3 @@ definitions:
       test:
         type: boolean
         description: Use for sending test-messages in production environments without affecting business.
-# Added by API Auto Mocking Plugin
-host: virtserver.swaggerhub.com
-basePath: /NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0

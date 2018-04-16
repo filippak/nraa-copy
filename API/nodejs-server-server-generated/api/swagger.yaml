@@ -1,0 +1,378 @@
+---
+swagger: "2.0"
+info:
+  description: "TODO/Following David's template"
+  version: "1.0.0"
+  title: "Nordic Recipient Admin App"
+  termsOfService: "TODO"
+  contact:
+    name: "David Hultsberg"
+    email: "david.hultsberg@postnord.com"
+  license:
+    name: "PostNord Property"
+host: "virtserver.swaggerhub.com"
+basePath: "/NordicRecipientAdmin/NordicRecipientAdminAPI/1.0.0"
+schemes:
+- "https"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+security:
+- ApiKeyAuth: []
+- OAuth2:
+  - "read"
+  - "write"
+paths:
+  /health:
+    get:
+      summary: "Checks if the server and its dependencies are working"
+      operationId: "healthGET"
+      parameters: []
+      responses:
+        200:
+          description: "Server is up and running"
+        default:
+          description: "Something is wrong"
+      x-swagger-router-controller: "Default"
+  /routes:
+    get:
+      tags:
+      - "route"
+      summary: "Finds Routes by name"
+      description: "Muliple tags can be provided with comma separated strings. Use\\\
+        \ \\ tag1, tag2, tag3 for testing."
+      operationId: "findRoutes"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "query"
+        description: "api allows starts-with 2 first characters"
+        required: true
+        type: "string"
+        collectionFormat: "multi"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/MailDeliveryRoute"
+        400:
+          description: "Invalid tag value"
+        404:
+          description: "Hello"
+      x-swagger-router-controller: "Route"
+  /deliveryAddresses:
+    get:
+      tags:
+      - "deliveryAddress"
+      summary: "Finds delivery addresses by route name"
+      operationId: "findDeliveryAddresses"
+      parameters:
+      - name: "route name"
+        in: "query"
+        description: "api allows starts-with 2 first characters"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DeliveryAddress"
+        400:
+          description: "Invalid route name"
+      x-swagger-router-controller: "DeliveryAddress"
+  /deliveryPoints:
+    get:
+      tags:
+      - "deliveryPoint"
+      summary: "Finds delivery points by delivery address id"
+      operationId: "findDeliveryPoints"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DeliveryPoint"
+        400:
+          description: "Invalid delivery address id"
+      x-swagger-router-controller: "DeliveryPoint"
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "X-API-Key"
+    in: "header"
+  OAuth2:
+    type: "oauth2"
+    authorizationUrl: "https://example.com/oauth/authorize"
+    tokenUrl: "https://example.com/oauth/token"
+    flow: "accessCode"
+    scopes:
+      read: "Grants read access"
+      write: "Grants write access"
+      admin: "Grants read and write access to administrative information"
+definitions:
+  Recipient:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      delivery_point_id:
+        type: "string"
+        format: "uuid"
+      firstname:
+        type: "string"
+      lastname:
+        type: "string"
+      sequence_number:
+        type: "string"
+      private_recipient:
+        type: "boolean"
+      expiration_date:
+        type: "string"
+        format: "date-time"
+      starting_date:
+        type: "string"
+        format: "date-time"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "A recipient (person) that resides at a delivery point. TODO consider\
+      \ naming it recipient instead"
+  DeliveryPoint:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      delivery_address_id:
+        type: "string"
+        format: "uuid"
+      apartment_number:
+        type: "string"
+      sequence_number:
+        type: "string"
+      decline_odr:
+        type: "boolean"
+      decline_gt:
+        type: "boolean"
+      floor:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "The delivery end point for mail"
+    example:
+      sequence_number: "sequence_number"
+      decline_odr: true
+      apartment_number: "apartment_number"
+      metadata:
+        transaction_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        schema: "schema"
+        jsonsign: "jsonsign"
+        source_objectId: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        enqueued_at: "2000-01-23T04:56:07.000+00:00"
+        test: true
+        modified_by: "http://example.com/aeiou"
+        created_at: "2000-01-23T04:56:07.000+00:00"
+        modified_at: "2000-01-23T04:56:07.000+00:00"
+        object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      decline_gt: true
+      delivery_address_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      floor: "floor"
+      object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  DeliveryAddress:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      mail_delivery_route_id:
+        type: "string"
+        format: "uuid"
+      stop_point_id:
+        type: "string"
+        format: "uuid"
+      postal_code:
+        type: "string"
+      street_address:
+        type: "string"
+        format: "address"
+      address_position:
+        type: "integer"
+      sequence_number:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "The delivery address for mail"
+    example:
+      sequence_number: "sequence_number"
+      street_address: "street_address"
+      metadata:
+        transaction_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        schema: "schema"
+        jsonsign: "jsonsign"
+        source_objectId: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        enqueued_at: "2000-01-23T04:56:07.000+00:00"
+        test: true
+        modified_by: "http://example.com/aeiou"
+        created_at: "2000-01-23T04:56:07.000+00:00"
+        modified_at: "2000-01-23T04:56:07.000+00:00"
+        object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      stop_point_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      address_position: 0
+      postal_code: "postal_code"
+      object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      mail_delivery_route_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  StopPoint:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      stop_point_type:
+        $ref: "#/definitions/StopPoint_stop_point_type"
+      delivery_address_id:
+        type: "string"
+        format: "uuid"
+      information:
+        type: "string"
+      door_code:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "TODO"
+  MailDeliveryRoute:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      delivery_office_id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+      sequence_number:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "TODO"
+    example:
+      sequence_number: "sequence_number"
+      metadata:
+        transaction_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        schema: "schema"
+        jsonsign: "jsonsign"
+        source_objectId: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        enqueued_at: "2000-01-23T04:56:07.000+00:00"
+        test: true
+        modified_by: "http://example.com/aeiou"
+        created_at: "2000-01-23T04:56:07.000+00:00"
+        modified_at: "2000-01-23T04:56:07.000+00:00"
+        object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      name: "name"
+      delivery_office_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  DeliveryOffice:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+        description: "The name of the delivery office"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "TODO"
+  RecipientGroup:
+    type: "object"
+    required:
+    - "metadata"
+    properties:
+      delivery_point_id:
+        type: "string"
+        format: "uuid"
+      amount:
+        type: "integer"
+      recipient_group_type:
+        $ref: "#/definitions/StopPoint_stop_point_type"
+      metadata:
+        $ref: "#/definitions/Metadata"
+    description: "TODO"
+  Metadata:
+    type: "object"
+    required:
+    - "modified_at"
+    - "object_id"
+    properties:
+      transaction_id:
+        type: "string"
+        format: "uuid"
+      enqueued_at:
+        type: "string"
+        format: "date-time"
+      object_id:
+        type: "string"
+        format: "uuid"
+      source_objectId:
+        type: "string"
+        format: "uuid"
+      modified_by:
+        type: "string"
+        format: "uri"
+        description: "Format hardwareid/app/idp/userid or regex?"
+      modified_at:
+        type: "string"
+        format: "date-time"
+      created_at:
+        type: "string"
+        format: "date-time"
+      jsonsign:
+        type: "string"
+        description: "A digital signature for non repudation and protection from changes."
+      schema:
+        type: "string"
+        description: "schema-version for supporting multiple versions on the same\
+          \ topics etc"
+      test:
+        type: "boolean"
+        description: "Use for sending test-messages in production environments without\
+          \ affecting business."
+    description: "This is from David's template. Base object with attributes for tracability,\
+      \ security and synchronization of changes"
+    example:
+      transaction_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      schema: "schema"
+      jsonsign: "jsonsign"
+      source_objectId: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      enqueued_at: "2000-01-23T04:56:07.000+00:00"
+      test: true
+      modified_by: "http://example.com/aeiou"
+      created_at: "2000-01-23T04:56:07.000+00:00"
+      modified_at: "2000-01-23T04:56:07.000+00:00"
+      object_id: "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  StopPoint_stop_point_type:
+    properties:
+      object_id:
+        type: "string"
+        format: "uuid"
+      name:
+        type: "string"
+      label:
+        type: "string"
