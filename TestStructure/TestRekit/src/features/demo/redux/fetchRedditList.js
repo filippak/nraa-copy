@@ -27,7 +27,7 @@ export function fetchRedditList(args = {}) {
         (res) => {
           dispatch({
             type: DEMO_FETCH_REDDIT_LIST_SUCCESS,
-            data: res.data.data.children.map(child => child.data),
+            data: res,
           });
           resolve(res);
         },

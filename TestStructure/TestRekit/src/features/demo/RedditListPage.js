@@ -16,11 +16,10 @@ export class RedditListPage extends Component {
         <button onClick={this.props.actions.fetchRedditList}>Fetch topics </button>
         <br />
         <br />
-        <ul> {this.props.demo.redditList.map(item =>(
-          <li key={item.id}>
-          <a href={item.url}>{item.title}</a>
+        <ul> 
+          <li>
+          List item!
           </li>
-          ))}
         </ul>
       </div>
     );
